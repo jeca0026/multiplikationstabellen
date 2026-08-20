@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multiplikationsträning</title>
+  <meta name="description" content="Multiplikationsträning för årskurs 5 med bildstöd, snabb koll, träning och test. Ingen inloggning och ingen permanent lagring.">
+  <style>
+    :root{
+      --bg:#f6f8fc;
+      --card:#ffffff;
+      --text:#182335;
+      --muted:#5d6978;
+      --line:#d6deeb;
+      --blue:#2563eb;
+      --blue-soft:#eaf2ff;
+      --green:#1f8a4c;
+      --green-soft:#eaf7ef;
+      --yellow:#b77900;
+      --yellow-soft:#fff6d9;
+      --red:#b42318;
+      --red-soft:#fff0ee;
+      --gray:#eef2f7;
+      --shadow:0 10px 30px rgba(24,35,53,.08);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    html{color-scheme:light}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.45;
+    }
+    button,input{font:inherit}
+    button{cursor:pointer}
+    .app{
+      width:min(980px, calc(100% - 24px));
+      margin:0 auto;
+      padding:20px 0 40px;
+    }
+    .hero{
+      display:flex;
+      align-items:flex-start;
+      gap:14px;
+      margin-bottom:16px;
+    }
+    .hero-icon{
+      width:54px;height:54px;border-radius:16px;
+      display:grid;place-items:center;
+      background:var(--blue-soft);
+      border:1px solid #bed2ff;
+      font-size:28px;
+      flex:0 0 auto;
+    }
+    h1,h2,h3,p{margin-top:0}
+    h1{font-size:clamp(1.8rem,4.5vw,2.7rem);margin-bottom:6px}
+    h2{font-size:clamp(1.2rem,3vw,1.6rem);margin-bottom:8px}
+    .subtitle{color:var(--muted);margin:0}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:clamp(18px,3vw,28px);
+    }
+    .hidden{display:none !important}
+    .small{font-size:.95rem;color:var(--muted)}
+    .mode-grid,.summary-grid,.legend,.support-grid,.fact-grid,.status-grid{
+      display:grid;
+      gap:12px;
+    }
+    .mode-grid{grid-template-columns:repeat(4,1fr);margin-top:18px}
+    .mode{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+      padding:16px;
+      text-align:left;
+      min-height:144px;
+      transition:.15s ease;
+    }
+    .mode:hover,.mode:focus-visible{
+      transform:translateY(-2px);
+      border-color:#9db9f5;
+      box-shadow:0 8px 20px rgba(37,99,235,.1);
+    }
+    .mode-icon{font-size:28px;margin-bottom:10px}
+    .mode strong{display:block;font-size:1.06rem;margin-bottom:6px}
+    .mode span{color:var(--muted);font-size:.97rem}
+    .note{
+      margin-top:18px;
+      padding:14px 16px;
+      border-radius:16px;
+      background:var(--blue-soft);
+      border:1px solid #c8daff;
+    }
+    .toolbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:14px;
+    }
+    .lefttools,.righttools{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .btn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 14px;
+      font-weight:700;
+    }
+    .btn:hover,.btn:focus-visible{border-color:#9db9f5}
+    .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+    .btn.green{background:var(--green);border-color:var(--green);color:#fff}
+    .btn.soft{background:var(--blue-soft);border-color:#bfd4ff}
+    .progress-wrap{min-width:220px;flex:1}
+    .progress-label{display:flex;justify-content:space-between;font-size:.92rem;color:var(--muted);margin-bottom:5px}
+    .progress{height:10px;border-radius:999px;background:#ebf0f6;overflow:hidden}
+    .progress > div{height:100%;width:0;background:var(--blue);transition:width .25s ease}
+    .eq{
+      text-align:center;
+      font-size:clamp(2.2rem,7vw,4.4rem);
+      font-weight:800;
+      margin:6px 0 6px;
+    }
+    .center{text-align:center}
+    .visual-card{
+      border:1px solid var(--line);
+      background:#fbfdff;
+      border-radius:18px;
+      padding:16px;
+      margin:14px auto 16px;
+    }
+    .visual-title{font-weight:800;margin-bottom:10px;text-align:left}
+    .groups{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:10px;
+      min-height:86px;
+    }
+    .group{
+      width:68px;
+      min-height:68px;
+      border:2px solid var(--blue);
+      border-radius:18px;
+      background:#fff;
+      display:grid;
+      place-items:center;
+      padding:8px;
+    }
+    .dots{
+      display:grid;
+      grid-template-columns:repeat(3,10px);
+      gap:5px;
+      justify-content:center;
+      align-content:center;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background:#111827;
+    }
+    .input-row{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:10px;
+      margin-top:10px;
+    }
+    .answer{
+      width:150px;
+      border:2px solid #bcc9dd;
+      border-radius:14px;
+      text-align:center;
+      font-size:1.5rem;
+      font-weight:800;
+      padding:11px 12px;
+      outline:none;
+      color:var(--text);
+      background:#fff;
+    }
+    .answer:focus{
+      border-color:var(--blue);
+      box-shadow:0 0 0 4px var(--blue-soft);
+    }
+    .feedback{
+      min-height:60px;
+      margin-top:14px;
+      border-radius:14px;
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      font-weight:700;
+    }
+    .ok{background:var(--green-soft);border:1px solid #bbe4c8;color:var(--green)}
+    .bad{background:var(--red-soft);border:1px solid #ffc9c4;color:var(--red)}
+    .info{background:var(--gray);border:1px solid #dde5f0;color:var(--text)}
+    .help-box{
+      margin-top:12px;
+      padding:14px 16px;
+      border-radius:14px;
+      background:var(--yellow-soft);
+      border:1px solid #efd37d;
+    }
+    .support-grid{grid-template-columns:repeat(2,1fr);margin-top:6px}
+    .summary-grid{grid-template-columns:repeat(3,1fr);margin:18px 0}
+    .metric{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      text-align:center;
+    }
+    .metric b{display:block;font-size:1.8rem;margin-bottom:4px}
+    .fact-grid{grid-template-columns:repeat(3,1fr);margin-top:14px}
+    .fact-btn{
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+      padding:12px;
+      font-weight:800;
+      text-align:center;
+    }
+    .fact-btn:hover,.fact-btn:focus-visible{border-color:#9db9f5;background:#fbfdff}
+    .status-grid{
+      grid-template-columns:repeat(7,1fr);
+      margin-top:12px;
+    }
+    .status-chip{
+      border-radius:14px;
+      padding:10px 8px;
+      font-weight:800;
+      text-align:center;
+      border:1px solid var(--line);
+      background:#fff;
+      font-size:.98rem;
+    }
+    .s0{background:#fff;border-color:var(--line)}
+    .s1{background:var(--yellow-soft);border-color:#f1d98f}
+    .s2{background:var(--green-soft);border-color:#b9e2c7}
+    .legend{grid-template-columns:repeat(3,1fr);margin-top:10px}
+    .legend .item{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .swatch{
+      width:20px;height:20px;border-radius:8px;border:1px solid var(--line);display:inline-block
+    }
+    .sw0{background:#fff}
+    .sw1{background:var(--yellow-soft);border-color:#f1d98f}
+    .sw2{background:var(--green-soft);border-color:#b9e2c7}
+    .pill-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .pill{
+      padding:7px 10px;
+      border-radius:999px;
+      background:var(--blue-soft);
+      border:1px solid #c8daff;
+      font-weight:800;
+    }
+    .footer{text-align:center;color:var(--muted);font-size:.9rem;margin-top:18px}
+    @media (max-width:860px){
+      .mode-grid{grid-template-columns:repeat(2,1fr)}
+      .status-grid{grid-template-columns:repeat(4,1fr)}
+      .fact-grid{grid-template-columns:repeat(2,1fr)}
+      .legend,.summary-grid,.support-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:560px){
+      .mode-grid,.fact-grid,.status-grid{grid-template-columns:1fr}
+      .group{width:60px;min-height:60px}
+      .dots{grid-template-columns:repeat(3,9px);gap:4px}
+      .dot{width:9px;height:9px}
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <div class="hero-icon" aria-hidden="true">✖️</div>
+      <div>
+        <h1>Multiplikationsträning</h1>
+        <p class="subtitle">För årskurs 5 • inga konton • inget sparas när sidan stängs</p>
+      </div>
+    </header>
+
+    <section id="home" class="card">
+      <h2>Välj hur du vill arbeta</h2>
+      <p>Korta pass är bäst. Du kan börja med en <strong>snabb koll</strong> eller träna direkt.</p>
+
+      <div class="mode-grid">
+        <button class="mode" data-open="quick" type="button">
+          <div class="mode-icon" aria-hidden="true">🔎</div>
+          <strong>Snabb koll</strong>
+          <span>21 multiplikationer. Du ser vad du behöver träna mer.</span>
+        </button>
+
+        <button class="mode" data-open="learn" type="button">
+          <div class="mode-icon" aria-hidden="true">👀</div>
+          <strong>Lär med bild</strong>
+          <span>Se grupper, prickar och hur man kan tänka.</span>
+        </button>
+
+        <button class="mode" data-open="practice" type="button">
+          <div class="mode-icon" aria-hidden="true">✏️</div>
+          <strong>Träna</strong>
+          <span>Multiplikationer du missar kommer tillbaka igen.</span>
+        </button>
+
+        <button class="mode" data-open="test" type="button">
+          <div class="mode-icon" aria-hidden="true">⭐</div>
+          <strong>Testa dig</strong>
+          <span>Alla 21 multiplikationer i blandad ordning.</span>
+        </button>
+      </div>
+
+      <div class="note">
+        <strong>Kom ihåg:</strong> 3 · 8 betyder <strong>3 grupper</strong> med <strong>8 i varje grupp</strong>.
+        <br>3 · 8 = 8 · 3
+      </div>
+
+      <div style="margin-top:20px">
+        <h3>Min karta för den här gången</h3>
+        <p class="small">Här ser du vad du har arbetat med under just detta besök.</p>
+        <div id="statusGridHome" class="status-grid"></div>
+        <div class="legend">
+          <div class="item"><span class="swatch sw0"></span><span>Inte tränad ännu</span></div>
+          <div class="item"><span class="swatch sw1"></span><span>På väg</span></div>
+          <div class="item"><span class="swatch sw2"></span><span>Kan bra</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="learn" class="card hidden" aria-live="polite">
+      <div class="toolbar">
+        <div class="lefttools">
+          <button class="btn back" type="button">← Till start</button>
+          <strong>Lär med bild</strong>
+        </div>
+      </div>
+      <p>Välj en multiplikation.</p>
+      <div id="factGrid" class="fact-grid"></div>
+      <div id="learnStage" style="margin-top:16px"></div>
+    </section>
+
+    <section id="quiz" class="card hidden" aria-live="polite">
+      <div class="toolbar">
+        <div class="lefttools">
+          <button class="btn back" type="button">← Till start</button>
+          <strong id="quizTitle">Träna</strong>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span id="progressText">Uppgift 1 av 10</span>
+            <span id="scoreText">0 rätt</span>
+          </div>
+          <div class="progress"><div id="progressBar"></div></div>
+        </div>
+      </div>
+
+      <div class="center">
+        <p id="quizHelp" class="small"></p>
+        <div id="equation" class="eq"></div>
+
+        <div id="visualCard" class="visual-card hidden">
+          <div class="visual-title">Lika stora grupper</div>
+          <div id="groups" class="groups"></div>
+        </div>
+
+        <div class="support-grid" id="supportButtons">
+          <button id="showImageBtn" class="btn soft" type="button">Visa bild</button>
+          <button id="showHintBtn" class="btn soft" type="button">Jag behöver hjälp</button>
+        </div>
+
+        <div id="hintBox" class="help-box hidden"></div>
+
+        <div class="input-row">
+          <input id="answer" class="answer" inputmode="numeric" autocomplete="off" aria-label="Ditt svar">
+          <button id="checkBtn" class="btn primary" type="button">Kontrollera</button>
+          <button id="nextBtn" class="btn green hidden" type="button">Nästa →</button>
+        </div>
+
+        <div id="feedback" class="feedback info">Skriv ditt svar och tryck på Kontrollera.</div>
+      </div>
+    </section>
+
+    <section id="summary" class="card hidden">
+      <h2 id="summaryTitle">Klart!</h2>
+      <p id="summaryLead"></p>
+
+      <div class="summary-grid">
+        <div class="metric"><b id="sumCorrect">0</b><span>rätt</span></div>
+        <div class="metric"><b id="sumTotal">0</b><span>uppgifter</span></div>
+        <div class="metric"><b id="sumPercent">0%</b><span>träffsäkerhet</span></div>
+      </div>
+
+      <div id="focusWrap" class="hidden">
+        <h3>Träna gärna lite extra på</h3>
+        <div id="focusList" class="pill-list"></div>
+      </div>
+
+      <div class="input-row" style="justify-content:flex-start;margin-top:18px">
+        <button id="trainFocusBtn" class="btn primary hidden" type="button">Träna det här</button>
+        <button id="againBtn" class="btn" type="button">Kör igen</button>
+        <button class="btn back" type="button">Till start</button>
+      </div>
+    </section>
+
+    <p class="footer">Ingen inloggning • ingen permanent lagring • allt stannar i webbläsaren medan sidan är öppen</p>
+  </main>
+
+<script>
+(() => {
+  "use strict";
+
+  const FACTS = [
+    [3,3],[3,4],[3,6],[3,7],[3,8],[3,9],
+    [4,4],[4,6],[4,7],[4,8],[4,9],
+    [6,6],[6,7],[6,8],[6,9],
+    [7,7],[7,8],[7,9],
+    [8,8],[8,9],
+    [9,9]
+  ].map(([a,b]) => ({a,b,key:`${a}x${b}`,product:a*b}));
+
+  const $ = (s) => document.querySelector(s);
+  const sections = ["#home","#learn","#quiz","#summary"].map(s => $(s));
+
+  const sessionState = {
+    mastery:{},   // 0 = ej tränad, 1 = på väg, 2 = kan bra
+    seen:{},
+    focusKeys:[]
+  };
+  FACTS.forEach(f => {
+    sessionState.mastery[f.key] = 0;
+    sessionState.seen[f.key] = 0;
+  });
+
+  let quiz = {
+    mode:"practice",
+    queue:[],
+    index:0,
+    correct:0,
+    checked:false,
+    current:null,
+    currentSupport:false,
+    firstTryMap:{},
+    focusKeys:[]
+  };
+
+  function show(id){
+    sections.forEach(s => s.classList.add("hidden"));
+    $(id).classList.remove("hidden");
+    window.scrollTo({top:0, behavior:"smooth"});
+    renderStatusMap();
+  }
+
+  function shuffle(arr){
+    const copy = [...arr];
+    for(let i=copy.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [copy[i],copy[j]] = [copy[j],copy[i]];
+    }
+    return copy;
+  }
+
+  function renderStatusMap(){
+    const grid = $("#statusGridHome");
+    grid.innerHTML = "";
+    FACTS.forEach(f => {
+      const level = sessionState.mastery[f.key];
+      const cell = document.createElement("div");
+      cell.className = `status-chip s${level}`;
+      cell.textContent = `${f.a}·${f.b}`;
+      grid.appendChild(cell);
+    });
+  }
+
+  function makeDotGroup(b){
+    const group = document.createElement("div");
+    group.className = "group";
+    const dots = document.createElement("div");
+    dots.className = "dots";
+    for(let i=0;i<b;i++){
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      dots.appendChild(dot);
+    }
+    group.appendChild(dots);
+    return group;
+  }
+
+  function renderGroups(container, a, b){
+    container.innerHTML = "";
+    container.setAttribute("aria-label", `${a} grupper med ${b} i varje grupp`);
+    for(let i=0;i<a;i++){
+      container.appendChild(makeDotGroup(b));
+    }
+  }
+
+  function strategyText(a,b){
+    if(a === 3){
+      const two = 2*b;
+      return `Tänk så här: 3 · ${b} = 2 · ${b} + 1 · ${b}. Då blir det ${two} + ${b} = ${two+b}.`;
+    }
+    if(a === 4){
+      const dbl = 2*b;
+      return `Tänk så här: dubbla och dubbla igen. Först 2 · ${b} = ${dbl}. Sedan 4 · ${b} = ${dbl} + ${dbl} = ${2*dbl}.`;
+    }
+    if(a === 6){
+      const five = 5*b;
+      return `Tänk så här: 6 · ${b} = 5 · ${b} + ${b}. Det blir ${five} + ${b} = ${five+b}.`;
+    }
+    if(a === 7){
+      const five = 5*b;
+      const two = 2*b;
+      return `Tänk så här: 7 · ${b} = 5 · ${b} + 2 · ${b}. Det blir ${five} + ${two} = ${five+two}.`;
+    }
+    if(a === 8){
+      const ten = 10*b;
+      const two = 2*b;
+      return `Tänk så här: 8 · ${b} = 10 · ${b} − 2 · ${b}. Det blir ${ten} − ${two} = ${ten-two}.`;
+    }
+    if(a === 9){
+      const ten = 10*b;
+      return `Tänk så här: 9 · ${b} = 10 · ${b} − ${b}. Det blir ${ten} − ${b} = ${ten-b}.`;
+    }
+    return `Tänk på lika stora grupper: ${a} grupper med ${b} i varje grupp.`;
+  }
+
+  function buildLearn(){
+    const grid = $("#factGrid");
+    grid.innerHTML = "";
+    FACTS.forEach(f => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "fact-btn";
+      btn.textContent = `${f.a} · ${f.b}`;
+      btn.addEventListener("click", () => renderLearn(f));
+      grid.appendChild(btn);
+    });
+    renderLearn(FACTS[0]);
+  }
+
+  function renderLearn(f){
+    const stage = $("#learnStage");
+    const add = Array(f.a).fill(f.b).join(" + ");
+    stage.innerHTML = `
+      <div class="center">
+        <div class="eq">${f.a} · ${f.b} = ${f.product}</div>
+        <p><strong>${f.a} grupper</strong> med <strong>${f.b}</strong> i varje grupp.</p>
+      </div>
+      <div class="visual-card">
+        <div class="visual-title">Lika stora grupper</div>
+        <div id="learnGroups" class="groups"></div>
+      </div>
+      <div class="help-box">
+        <strong>Så kan du tänka:</strong><br>${strategyText(f.a, f.b)}
+      </div>
+      <p class="center small" style="margin-top:12px">${add} = ${f.product}</p>
+      <p class="center small">${f.a} · ${f.b} = ${f.b} · ${f.a}</p>
+    `;
+    renderGroups($("#learnGroups"), f.a, f.b);
+  }
+
+  function buildQueueForPractice(list){
+    const source = list && list.length ? list : FACTS;
+    let queue = [];
+    if(source.length <= 4){
+      while(queue.length < 10){
+        queue = queue.concat(shuffle(source));
+      }
+    } else {
+      queue = shuffle(source);
+      while(queue.length < 10){
+        queue = queue.concat(shuffle(source).slice(0, Math.min(3, source.length)));
+      }
+    }
+    queue = queue.slice(0,10);
+    return shuffle(queue);
+  }
+
+  function startQuiz(mode, customFocusKeys=null){
+    quiz = {
+      mode,
+      queue:[],
+      index:0,
+      correct:0,
+      checked:false,
+      current:null,
+      currentSupport:false,
+      firstTryMap:{},
+      focusKeys:[]
+    };
+
+    let title = "Träna";
+    let help = "Svara först. Om du behöver kan du visa bild eller hjälp.";
+    let support = true;
+
+    if(mode === "quick"){
+      title = "Snabb koll";
+      help = "Svara så gott du kan. Efteråt ser du vad du kan träna mer på.";
+      support = false;
+      quiz.queue = shuffle(FACTS);
+    } else if(mode === "practice"){
+      title = "Träna";
+      help = "Multiplikationer du missar kommer tillbaka igen.";
+      support = true;
+      const focus = customFocusKeys
+        ? FACTS.filter(f => customFocusKeys.includes(f.key))
+        : (sessionState.focusKeys.length ? FACTS.filter(f => sessionState.focusKeys.includes(f.key)) : FACTS);
+      quiz.queue = buildQueueForPractice(focus);
+      quiz.focusKeys = focus.map(f => f.key);
+    } else if(mode === "test"){
+      title = "Testa dig";
+      help = "Alla 21 multiplikationer kommer en gång.";
+      support = false;
+      quiz.queue = shuffle(FACTS);
+    }
+
+    $("#quizTitle").textContent = title;
+    $("#quizHelp").textContent = help;
+    $("#supportButtons").classList.toggle("hidden", !support);
+    show("#quiz");
+    renderQuestion();
+  }
+
+  function renderQuestion(){
+    if(quiz.index >= quiz.queue.length){
+      finishQuiz();
+      return;
+    }
+
+    const f = quiz.queue[quiz.index];
+    quiz.current = f;
+    quiz.checked = false;
+    quiz.currentSupport = false;
+
+    $("#equation").textContent = `${f.a} · ${f.b} = ?`;
+    $("#visualCard").classList.add("hidden");
+    $("#hintBox").classList.add("hidden");
+    $("#hintBox").innerHTML = "";
+    $("#feedback").className = "feedback info";
+    $("#feedback").textContent = "Skriv ditt svar och tryck på Kontrollera.";
+    $("#answer").value = "";
+    $("#answer").disabled = false;
+    $("#checkBtn").disabled = false;
+    $("#checkBtn").classList.remove("hidden");
+    $("#nextBtn").classList.add("hidden");
+
+    const total = quiz.queue.length;
+    $("#progressText").textContent = `Uppgift ${quiz.index+1} av ${total}`;
+    $("#scoreText").textContent = `${quiz.correct} rätt`;
+    $("#progressBar").style.width = `${(quiz.index/total)*100}%`;
+
+    setTimeout(() => $("#answer").focus(), 60);
+  }
+
+  function showImage(){
+    const f = quiz.current;
+    if(!f) return;
+    renderGroups($("#groups"), f.a, f.b);
+    $("#visualCard").classList.remove("hidden");
+    quiz.currentSupport = true;
+  }
+
+  function showHint(){
+    const f = quiz.current;
+    if(!f) return;
+    $("#hintBox").innerHTML = `<strong>Så kan du tänka:</strong><br>${strategyText(f.a, f.b)}`;
+    $("#hintBox").classList.remove("hidden");
+    quiz.currentSupport = true;
+  }
+
+  function updateMastery(key, correctFirstTry){
+    sessionState.seen[key] += 1;
+
+    if(correctFirstTry){
+      sessionState.mastery[key] = Math.min(2, sessionState.mastery[key] + 1);
+    } else {
+      if(sessionState.mastery[key] === 0){
+        sessionState.mastery[key] = 1;
+      }
+    }
+    renderStatusMap();
+  }
+
+  function checkAnswer(){
+    if(quiz.checked) return;
+    const raw = $("#answer").value.trim();
+    if(raw === "" || !/^-?\d+$/.test(raw)){
+      $("#feedback").className = "feedback bad";
+      $("#feedback").textContent = "Skriv ett heltal.";
+      return;
+    }
+
+    const f = quiz.current;
+    const guess = Number(raw);
+    const correct = guess === f.product;
+    const correctFirstTry = correct && !quiz.currentSupport;
+
+    if(!(f.key in quiz.firstTryMap)){
+      quiz.firstTryMap[f.key] = correctFirstTry;
+    } else if(correctFirstTry){
+      quiz.firstTryMap[f.key] = true;
+    }
+
+    updateMastery(f.key, correctFirstTry);
+
+    if(correct){
+      quiz.correct += 1;
+      $("#feedback").className = "feedback ok";
+      if(quiz.currentSupport){
+        $("#feedback").innerHTML = `Rätt! <strong>${f.a} · ${f.b} = ${f.product}</strong>`;
+      } else {
+        $("#feedback").innerHTML = `Bra! <strong>${f.a} · ${f.b} = ${f.product}</strong>`;
+      }
+    } else {
+      renderGroups($("#groups"), f.a, f.b);
+      $("#visualCard").classList.remove("hidden");
+      $("#hintBox").innerHTML = `<strong>Så kan du tänka:</strong><br>${strategyText(f.a, f.b)}`;
+      $("#hintBox").classList.remove("hidden");
+      $("#feedback").className = "feedback bad";
+      $("#feedback").innerHTML = `Rätt svar är <strong>${f.product}</strong>.`;
+
+      if(quiz.mode === "practice"){
+        const countSame = quiz.queue.filter(item => item.key === f.key).length;
+        if(countSame < 3){
+          const pos = Math.min(quiz.queue.length, quiz.index + 3 + Math.floor(Math.random()*3));
+          quiz.queue.splice(pos, 0, f);
+        }
+      }
+    }
+
+    $("#answer").disabled = true;
+    $("#checkBtn").classList.add("hidden");
+    $("#nextBtn").classList.remove("hidden");
+    $("#scoreText").textContent = `${quiz.correct} rätt`;
+    quiz.checked = true;
+  }
+
+  function nextQuestion(){
+    quiz.index += 1;
+    renderQuestion();
+  }
+
+  function finishQuiz(){
+    const total = quiz.queue.length;
+    const percent = total ? Math.round((quiz.correct/total)*100) : 0;
+    $("#sumCorrect").textContent = quiz.correct;
+    $("#sumTotal").textContent = total;
+    $("#sumPercent").textContent = `${percent}%`;
+
+    let title = "Klart!";
+    let lead = "Bra jobbat.";
+    let focusKeys = [];
+
+    if(quiz.mode === "quick"){
+      title = "Snabb kollen är klar";
+      lead = "Nu ser du vilka multiplikationer du kan träna mer på.";
+      focusKeys = FACTS
+        .filter(f => !quiz.firstTryMap[f.key])
+        .map(f => f.key);
+      sessionState.focusKeys = focusKeys;
+    } else if(quiz.mode === "practice"){
+      title = "Träningen är klar";
+      lead = "Fortsätt gärna med ett kort pass till.";
+      focusKeys = FACTS
+        .filter(f => sessionState.mastery[f.key] < 2)
+        .map(f => f.key);
+    } else if(quiz.mode === "test"){
+      title = "Testet är klart";
+      lead = "Här ser du ditt resultat.";
+      focusKeys = FACTS
+        .filter(f => !quiz.firstTryMap[f.key])
+        .map(f => f.key);
+      if(focusKeys.length){
+        sessionState.focusKeys = focusKeys;
+      }
+    }
+
+    $("#summaryTitle").textContent = title;
+    $("#summaryLead").textContent = lead;
+
+    const wrap = $("#focusWrap");
+    const list = $("#focusList");
+    list.innerHTML = "";
+    if(focusKeys.length){
+      wrap.classList.remove("hidden");
+      focusKeys.forEach(key => {
+        const f = FACTS.find(x => x.key === key);
+        const pill = document.createElement("span");
+        pill.className = "pill";
+        pill.textContent = `${f.a} · ${f.b}`;
+        list.appendChild(pill);
+      });
+      $("#trainFocusBtn").classList.remove("hidden");
+      $("#trainFocusBtn").onclick = () => startQuiz("practice", focusKeys);
+    } else {
+      wrap.classList.add("hidden");
+      $("#trainFocusBtn").classList.add("hidden");
+      $("#trainFocusBtn").onclick = null;
+    }
+
+    $("#againBtn").onclick = () => startQuiz(quiz.mode, quiz.mode==="practice" ? quiz.focusKeys : null);
+    show("#summary");
+  }
+
+  document.querySelectorAll("[data-open]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const mode = btn.dataset.open;
+      if(mode === "learn"){
+        buildLearn();
+        show("#learn");
+      } else {
+        startQuiz(mode);
+      }
+    });
+  });
+
+  document.querySelectorAll(".back").forEach(btn => {
+    btn.addEventListener("click", () => show("#home"));
+  });
+
+  $("#showImageBtn").addEventListener("click", showImage);
+  $("#showHintBtn").addEventListener("click", showHint);
+  $("#checkBtn").addEventListener("click", checkAnswer);
+  $("#nextBtn").addEventListener("click", nextQuestion);
+  $("#answer").addEventListener("keydown", (e) => {
+    if(e.key === "Enter"){
+      if(!quiz.checked) checkAnswer();
+      else nextQuestion();
+    }
+  });
+
+  buildLearn();
+  renderStatusMap();
+})();
+</script>
+</body>
+</html>
