@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Självrättande multiplikationsträning med 21 viktiga fakta och bildrepresentationer med lika stora grupper.">
+  <title>21 multiplikationer att träna</title>
+  <style>
+    :root{
+      --bg:#f7f9fc;
+      --card:#ffffff;
+      --text:#172033;
+      --muted:#5f6b7a;
+      --border:#d9e1ec;
+      --accent:#2563eb;
+      --accent-soft:#eaf2ff;
+      --good:#137a3f;
+      --good-soft:#eaf8ef;
+      --bad:#b42318;
+      --bad-soft:#fff0ee;
+      --warn:#9a6700;
+      --warn-soft:#fff7dc;
+      --shadow:0 8px 28px rgba(22,32,51,.08);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    html{color-scheme:light}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    button,input{font:inherit}
+    button{cursor:pointer}
+    .app{
+      width:min(920px, calc(100% - 28px));
+      margin:0 auto;
+      padding:24px 0 48px;
+    }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .brand-mark{
+      width:44px;height:44px;border-radius:14px;
+      display:grid;place-items:center;
+      background:var(--accent-soft);
+      border:1px solid #bfd4ff;
+      font-size:24px;
+    }
+    h1,h2,h3,p{margin-top:0}
+    h1{font-size:clamp(1.6rem,4vw,2.4rem);margin-bottom:6px}
+    h2{font-size:clamp(1.25rem,3vw,1.7rem)}
+    .subtitle{color:var(--muted);margin:0}
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:clamp(18px,4vw,30px);
+    }
+    .hidden{display:none!important}
+    .mode-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:20px;
+    }
+    .mode{
+      text-align:left;
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:18px;
+      padding:18px;
+      min-height:150px;
+      transition:.16s ease;
+    }
+    .mode:hover,.mode:focus-visible{
+      transform:translateY(-2px);
+      border-color:#9cb9f7;
+      box-shadow:0 8px 20px rgba(37,99,235,.10);
+    }
+    .mode-icon{font-size:28px;margin-bottom:8px}
+    .mode strong{display:block;font-size:1.08rem;margin-bottom:6px}
+    .mode span{color:var(--muted);line-height:1.45}
+    .note{
+      margin-top:18px;
+      padding:14px 16px;
+      border-radius:14px;
+      background:var(--warn-soft);
+      border:1px solid #f3df93;
+      color:#5f4800;
+    }
+    .toolbar{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:14px;
+    }
+    .btn{
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 14px;
+      font-weight:700;
+    }
+    .btn:hover,.btn:focus-visible{border-color:#9cb9f7}
+    .btn.primary{
+      background:var(--accent);
+      color:#fff;
+      border-color:var(--accent);
+    }
+    .btn.good{
+      background:var(--good);
+      color:#fff;
+      border-color:var(--good);
+    }
+    .progress-wrap{flex:1;min-width:190px}
+    .progress-label{
+      display:flex;justify-content:space-between;
+      color:var(--muted);font-size:.92rem;margin-bottom:6px;
+    }
+    .progress{
+      height:10px;background:#edf1f6;border-radius:999px;overflow:hidden
+    }
+    .progress > div{
+      height:100%;background:var(--accent);width:0%;
+      transition:width .25s ease
+    }
+    .problem{
+      text-align:center;
+    }
+    .equation{
+      font-size:clamp(2.2rem,7vw,4.3rem);
+      font-weight:800;
+      letter-spacing:.02em;
+      margin:8px 0 10px;
+    }
+    .helper{
+      color:var(--muted);
+      margin-bottom:18px;
+    }
+    .visual-card{
+      border:1px solid var(--border);
+      background:#fbfcff;
+      border-radius:18px;
+      padding:16px;
+      margin:14px auto 20px;
+    }
+    .visual-title{
+      font-weight:800;
+      margin-bottom:12px;
+      text-align:left;
+    }
+    .groups{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:center;
+      align-items:center;
+      min-height:86px;
+    }
+    .group{
+      width:68px;
+      min-height:68px;
+      border:2px solid var(--accent);
+      border-radius:18px;
+      padding:8px;
+      display:grid;
+      place-items:center;
+      background:#fff;
+    }
+    .dots{
+      display:grid;
+      grid-template-columns:repeat(3,10px);
+      gap:5px;
+      align-content:center;
+      justify-content:center;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--text);
+    }
+    .input-row{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+    .answer{
+      width:150px;
+      text-align:center;
+      font-size:1.45rem;
+      font-weight:800;
+      border:2px solid #b8c6d9;
+      border-radius:14px;
+      padding:11px 12px;
+      outline:none;
+      background:#fff;
+      color:var(--text);
+    }
+    .answer:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+    .feedback{
+      min-height:62px;
+      margin-top:14px;
+      border-radius:14px;
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      line-height:1.4;
+      font-weight:700;
+    }
+    .feedback.good{background:var(--good-soft);color:var(--good);border:1px solid #b9e6c9}
+    .feedback.bad{background:var(--bad-soft);color:var(--bad);border:1px solid #ffc9c4}
+    .fact-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:14px;
+    }
+    .fact-btn{
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:14px;
+      padding:12px;
+      text-align:center;
+      font-weight:800;
+    }
+    .fact-btn:hover,.fact-btn:focus-visible{border-color:#9cb9f7;background:#fbfdff}
+    .learn-stage{
+      margin-top:16px;
+      text-align:center;
+    }
+    .learn-equation{font-size:clamp(2rem,6vw,3.6rem);font-weight:800;margin:8px 0}
+    .addition{
+      font-size:clamp(1.05rem,3vw,1.35rem);
+      color:var(--muted);
+      margin-top:14px;
+    }
+    .summary-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin:18px 0;
+    }
+    .metric{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px;
+      text-align:center;
+      background:#fff;
+    }
+    .metric b{display:block;font-size:1.8rem;margin-bottom:4px}
+    .weak-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .chip{
+      display:inline-flex;
+      padding:7px 10px;
+      border-radius:999px;
+      background:var(--bad-soft);
+      color:var(--bad);
+      border:1px solid #ffc9c4;
+      font-weight:800;
+    }
+    .privacy{
+      margin-top:16px;
+      font-size:.92rem;
+      color:var(--muted);
+    }
+    .footer{
+      text-align:center;
+      color:var(--muted);
+      font-size:.9rem;
+      margin-top:18px;
+    }
+    @media (max-width:720px){
+      .mode-grid,.fact-grid,.summary-grid{grid-template-columns:1fr}
+      .topbar{align-items:flex-start}
+      .group{width:60px;min-height:60px}
+      .dots{grid-template-columns:repeat(3,9px);gap:4px}
+      .dot{width:9px;height:9px}
+    }
+  </style>
+</head>
+<body>
+  <main class="app" id="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">✖️</div>
+        <div>
+          <h1>21 multiplikationer att träna</h1>
+          <p class="subtitle">Lika stora grupper • korta pass • självrättande</p>
+        </div>
+      </div>
+    </div>
+
+    <section id="home" class="card">
+      <h2>Välj hur du vill träna</h2>
+      <p>Programmet tränar 21 multiplikationsfakta. Bilderna visar alltid <strong>första faktorn som antal grupper</strong> och <strong>andra faktorn som antal prickar i varje grupp</strong>.</p>
+
+      <div class="mode-grid">
+        <button class="mode" data-mode="learn" type="button">
+          <div class="mode-icon" aria-hidden="true">👀</div>
+          <strong>1. Se och förstå</strong>
+          <span>Välj ett fakta och se exakt hur multiplikationen byggs upp.</span>
+        </button>
+        <button class="mode" data-mode="practice" type="button">
+          <div class="mode-icon" aria-hidden="true">✏️</div>
+          <strong>2. Träna</strong>
+          <span>10 uppgifter. Missade fakta kommer tillbaka oftare.</span>
+        </button>
+        <button class="mode" data-mode="test" type="button">
+          <div class="mode-icon" aria-hidden="true">⏱️</div>
+          <strong>3. Testa dig</strong>
+          <span>Alla 21 fakta, blandade. Resultat visas när du är klar.</span>
+        </button>
+      </div>
+
+      <div class="note">
+        <strong>Kom ihåg:</strong> 3 · 8 betyder 3 lika stora grupper med 8 i varje.
+        Eftersom 3 · 8 = 8 · 3 kan du använda sådant du redan kan.
+      </div>
+
+      <p class="privacy">Ingen information skickas någonstans. Programmet fungerar direkt i webbläsaren och sparar inte elevdata.</p>
+    </section>
+
+    <section id="learn" class="card hidden" aria-live="polite">
+      <div class="toolbar">
+        <button class="btn back" type="button">← Till start</button>
+        <strong>Se och förstå</strong>
+      </div>
+      <p>Välj en multiplikation:</p>
+      <div id="factGrid" class="fact-grid"></div>
+      <div id="learnStage" class="learn-stage"></div>
+    </section>
+
+    <section id="quiz" class="card hidden" aria-live="polite">
+      <div class="toolbar">
+        <button class="btn back" type="button">← Till start</button>
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span id="progressText">Uppgift 1 av 10</span>
+            <span id="scoreText">0 rätt</span>
+          </div>
+          <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+        </div>
+      </div>
+
+      <div id="problemArea" class="problem">
+        <p id="modeLabel" class="helper"></p>
+        <div id="equation" class="equation"></div>
+
+        <div id="visualCard" class="visual-card">
+          <div class="visual-title">Lika stora grupper</div>
+          <div id="groups" class="groups"></div>
+        </div>
+
+        <div class="input-row">
+          <label>
+            <span class="hidden">Ditt svar</span>
+            <input id="answer" class="answer" inputmode="numeric" autocomplete="off" aria-label="Ditt svar">
+          </label>
+          <button id="checkBtn" class="btn primary" type="button">Kontrollera</button>
+          <button id="nextBtn" class="btn good hidden" type="button">Nästa →</button>
+        </div>
+
+        <div id="feedback" class="feedback" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="summary" class="card hidden">
+      <h2>Klart!</h2>
+      <p id="summaryLead"></p>
+      <div class="summary-grid">
+        <div class="metric"><b id="sumCorrect">0</b><span>rätt</span></div>
+        <div class="metric"><b id="sumTotal">0</b><span>uppgifter</span></div>
+        <div class="metric"><b id="sumPercent">0%</b><span>träffsäkerhet</span></div>
+      </div>
+      <div id="weakWrap" class="hidden">
+        <h3>Fakta att träna lite extra</h3>
+        <div id="weakList" class="weak-list"></div>
+      </div>
+      <div class="input-row" style="justify-content:flex-start;margin-top:20px">
+        <button id="againBtn" class="btn primary" type="button">Träna igen</button>
+        <button class="btn back" type="button">Till start</button>
+      </div>
+    </section>
+
+    <p class="footer">Öva lite i taget – du behöver inte lära dig allt på en gång.</p>
+  </main>
+
+<script>
+(() => {
+  "use strict";
+
+  const FACTS = [
+    [3,3],[3,4],[3,6],[3,7],[3,8],[3,9],
+    [4,4],[4,6],[4,7],[4,8],[4,9],
+    [6,6],[6,7],[6,8],[6,9],
+    [7,7],[7,8],[7,9],
+    [8,8],[8,9],
+    [9,9]
+  ].map(([a,b]) => ({a,b,key:`${a}x${b}`,product:a*b}));
+
+  const $ = (s) => document.querySelector(s);
+  const sections = ["#home","#learn","#quiz","#summary"].map(s => $(s));
+
+  let state = {
+    mode: "practice",
+    queue: [],
+    index: 0,
+    correct: 0,
+    attempts: {},
+    firstTryCorrect: {},
+    currentChecked: false,
+    lastMode: "practice"
+  };
+
+  function show(id){
+    sections.forEach(s => s.classList.add("hidden"));
+    $(id).classList.remove("hidden");
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  function shuffle(arr){
+    const copy = [...arr];
+    for(let i=copy.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [copy[i],copy[j]] = [copy[j],copy[i]];
+    }
+    return copy;
+  }
+
+  function makeDotGroup(b){
+    const group = document.createElement("div");
+    group.className = "group";
+    group.setAttribute("aria-label", `${b} prickar`);
+
+    const dots = document.createElement("div");
+    dots.className = "dots";
+    for(let i=0;i<b;i++){
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      dots.appendChild(dot);
+    }
+    group.appendChild(dots);
+    return group;
+  }
+
+  function renderGroups(container, a, b){
+    container.innerHTML = "";
+    container.setAttribute("aria-label", `${a} lika stora grupper med ${b} prickar i varje grupp`);
+    for(let g=0;g<a;g++){
+      container.appendChild(makeDotGroup(b));
+    }
+  }
+
+  function renderLearnFact(fact){
+    const stage = $("#learnStage");
+    const sum = Array(fact.a).fill(fact.b).join(" + ");
+    stage.innerHTML = `
+      <div class="learn-equation">${fact.a} · ${fact.b} = ${fact.product}</div>
+      <p><strong>${fact.a} grupper</strong> med <strong>${fact.b} prickar i varje</strong>.</p>
+      <div class="visual-card">
+        <div class="visual-title">Lika stora grupper</div>
+        <div id="learnGroups" class="groups"></div>
+      </div>
+      <p class="addition">${sum} = ${fact.product}</p>
+      <p class="addition">${fact.a} · ${fact.b} = ${fact.b} · ${fact.a} = ${fact.product}</p>
+    `;
+    renderGroups($("#learnGroups"), fact.a, fact.b);
+  }
+
+  function buildLearn(){
+    const grid = $("#factGrid");
+    grid.innerHTML = "";
+    FACTS.forEach((fact, i) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "fact-btn";
+      btn.textContent = `${fact.a} · ${fact.b}`;
+      btn.addEventListener("click", () => renderLearnFact(fact));
+      grid.appendChild(btn);
+    });
+    renderLearnFact(FACTS[0]);
+  }
+
+  function initQuiz(mode){
+    state = {
+      mode,
+      queue: [],
+      index: 0,
+      correct: 0,
+      attempts: {},
+      firstTryCorrect: {},
+      currentChecked: false,
+      lastMode: mode
+    };
+
+    if(mode === "test"){
+      state.queue = shuffle(FACTS);
+    } else {
+      state.queue = shuffle(FACTS).slice(0,10);
+    }
+
+    $("#modeLabel").textContent =
+      mode === "test"
+        ? "Test: alla 21 fakta visas en gång."
+        : "Träning: fakta du missar kan komma tillbaka igen.";
+
+    show("#quiz");
+    renderQuestion();
+  }
+
+  function renderQuestion(){
+    if(state.index >= state.queue.length){
+      finishQuiz();
+      return;
+    }
+
+    const fact = state.queue[state.index];
+    state.currentChecked = false;
+
+    $("#equation").textContent = `${fact.a} · ${fact.b} = ?`;
+    renderGroups($("#groups"), fact.a, fact.b);
+
+    $("#answer").value = "";
+    $("#answer").disabled = false;
+    $("#checkBtn").disabled = false;
+    $("#checkBtn").classList.remove("hidden");
+    $("#nextBtn").classList.add("hidden");
+    $("#feedback").textContent = "";
+    $("#feedback").className = "feedback";
+
+    const total = state.queue.length;
+    $("#progressText").textContent = `Uppgift ${state.index + 1} av ${total}`;
+    $("#scoreText").textContent = `${state.correct} rätt`;
+    $("#progressBar").style.width = `${(state.index / total) * 100}%`;
+
+    setTimeout(() => $("#answer").focus(), 50);
+  }
+
+  function checkAnswer(){
+    if(state.currentChecked) return;
+
+    const fact = state.queue[state.index];
+    const raw = $("#answer").value.trim();
+    if(raw === "" || !/^-?\d+$/.test(raw)){
+      $("#feedback").textContent = "Skriv ett heltal som svar.";
+      $("#feedback").className = "feedback bad";
+      return;
+    }
+
+    const value = Number(raw);
+    const key = fact.key;
+    state.attempts[key] = (state.attempts[key] || 0) + 1;
+
+    const isCorrect = value === fact.product;
+    state.currentChecked = true;
+
+    if(!(key in state.firstTryCorrect)){
+      state.firstTryCorrect[key] = isCorrect;
+    }
+
+    if(isCorrect){
+      state.correct += 1;
+      $("#feedback").innerHTML = `Rätt! <strong>${fact.a} · ${fact.b} = ${fact.product}</strong>`;
+      $("#feedback").className = "feedback good";
+    } else {
+      const sum = Array(fact.a).fill(fact.b).join(" + ");
+      $("#feedback").innerHTML =
+        `Rätt svar är <strong>${fact.product}</strong>. Tänk: ${sum} = ${fact.product}.`;
+
+      $("#feedback").className = "feedback bad";
+
+      if(state.mode === "practice"){
+        // Lägg tillbaka missat fakta senare, men högst två extra gånger.
+        const alreadyQueued = state.queue.filter(f => f.key === key).length;
+        if(alreadyQueued < 3){
+          const insertAt = Math.min(state.queue.length, state.index + 3 + Math.floor(Math.random()*3));
+          state.queue.splice(insertAt, 0, fact);
+        }
+      }
+    }
+
+    $("#answer").disabled = true;
+    $("#checkBtn").classList.add("hidden");
+    $("#nextBtn").classList.remove("hidden");
+    $("#scoreText").textContent = `${state.correct} rätt`;
+  }
+
+  function nextQuestion(){
+    state.index += 1;
+    renderQuestion();
+  }
+
+  function finishQuiz(){
+    const total = state.queue.length;
+    const percent = total ? Math.round((state.correct/total)*100) : 0;
+
+    $("#sumCorrect").textContent = state.correct;
+    $("#sumTotal").textContent = total;
+    $("#sumPercent").textContent = `${percent}%`;
+
+    $("#summaryLead").textContent =
+      state.mode === "test"
+        ? "Här är ditt resultat på de 21 multiplikationsfakta."
+        : "Bra jobbat. I träningen kan missade fakta ha kommit tillbaka flera gånger.";
+
+    const weakKeys = Object.entries(state.firstTryCorrect)
+      .filter(([,ok]) => !ok)
+      .map(([key]) => key);
+
+    const weakFacts = FACTS.filter(f => weakKeys.includes(f.key));
+
+    const wrap = $("#weakWrap");
+    const list = $("#weakList");
+    list.innerHTML = "";
+
+    if(weakFacts.length){
+      wrap.classList.remove("hidden");
+      weakFacts.forEach(f => {
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.textContent = `${f.a} · ${f.b}`;
+        list.appendChild(chip);
+      });
+    } else {
+      wrap.classList.add("hidden");
+    }
+
+    $("#againBtn").textContent = state.mode === "test" ? "Gör testet igen" : "Träna igen";
+    show("#summary");
+  }
+
+  document.querySelectorAll("[data-mode]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const mode = btn.dataset.mode;
+      if(mode === "learn"){
+        buildLearn();
+        show("#learn");
+      } else {
+        initQuiz(mode);
+      }
+    });
+  });
+
+  document.querySelectorAll(".back").forEach(btn => {
+    btn.addEventListener("click", () => show("#home"));
+  });
+
+  $("#checkBtn").addEventListener("click", checkAnswer);
+  $("#nextBtn").addEventListener("click", nextQuestion);
+  $("#againBtn").addEventListener("click", () => initQuiz(state.lastMode));
+
+  $("#answer").addEventListener("keydown", (e) => {
+    if(e.key === "Enter"){
+      if(!state.currentChecked) checkAnswer();
+      else nextQuestion();
+    }
+  });
+})();
+</script>
+</body>
+</html>
